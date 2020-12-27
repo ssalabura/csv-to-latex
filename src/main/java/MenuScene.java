@@ -10,6 +10,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.io.IOException;
 
 public class MenuScene extends Scene {
     private static StackPane root = new StackPane();
@@ -23,11 +24,18 @@ public class MenuScene extends Scene {
         btnLoadFile.setFont(Font.font(30));
         btnLoadFile.setOnAction(event -> {
             FileChooser fileChooser = new FileChooser();
-            fileChooser.setTitle("Open .csv file...");
+            fileChooser.setTitle("Load .csv file...");
             fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV","*.csv"));
             File file = fileChooser.showOpenDialog(stage);
             if(file != null) {
-                new Alert(Alert.AlertType.ERROR, "I don't know what to do with this file yet :(").show();
+                try {
+                    OptionsScene optionsScene = new OptionsScene();
+                    optionsScene.load(new CSVData(file));
+                    stage.setScene(optionsScene);
+                } catch (IOException e) {
+                    new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+                    e.printStackTrace();
+                }
             }
         });
 

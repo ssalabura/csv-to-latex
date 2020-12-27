@@ -2,14 +2,17 @@ import javafx.application.Application;;
 import javafx.stage.Stage;
 
 public class Program extends Application {
+    static Stage stage;
+    static MenuScene menuScene;
     @Override
-    public void start(Stage primaryStage) throws Exception {
-        primaryStage.setTitle("CSV to LaTeX");
+    public void start(Stage primaryStage) {
+        stage = primaryStage;
+        stage.setTitle("CSV to LaTeX");
 
-        MenuScene menuScene = new MenuScene();
+        menuScene = new MenuScene();
         menuScene.load(primaryStage);
 
-        primaryStage.setScene(menuScene);
-        primaryStage.show();
+        stage.setScene(menuScene);
+        stage.show();
     }
 }
