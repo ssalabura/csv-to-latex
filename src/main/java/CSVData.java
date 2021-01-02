@@ -10,6 +10,10 @@ public class CSVData {
         data = parseFile(file);
     }
 
+    String getFileName() {
+        return file.getName().substring(0,file.getName().length()-4);
+    }
+
     ArrayList<ArrayList<String>> getData() {
         return new ArrayList<>(data.subList(1,data.size()));
     }
@@ -72,6 +76,41 @@ public class CSVData {
         return output;
     }
 
+    private Integer getColumnNumber(String label) {
+        for(int i=0; i<getLabels().size(); i++) {
+            if(getLabels().get(i).equals(label)) return i;
+        }
+        return null;
+    }
+
+    boolean isColumnParseable(String label) {
+        Integer columnNumber = getColumnNumber(label);
+        if(columnNumber == null) return false;
+        for(ArrayList<String> row : getData()) {
+            try {
+                Double.parseDouble(row.get(columnNumber));
+            } catch (NumberFormatException e) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    Coordinates makeCoordinates(String xlabel, String ylabel) {
+        if(!isColumnParseable(xlabel) || !isColumnParseable(ylabel)) {
+            throw new RuntimeException("Columns cannot be parsed as numbers!");
+        }
+        Integer xColumn = getColumnNumber(xlabel);
+        Integer yColumn = getColumnNumber(ylabel);
+
+        Coordinates output = new Coordinates();
+        for(ArrayList<String> list : getData()) {
+            output.add(Double.parseDouble(list.get(xColumn)), Double.parseDouble(list.get(yColumn)));
+        }
+        return output;
+    }
+
+    @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
         for(ArrayList<String> list : data) {
