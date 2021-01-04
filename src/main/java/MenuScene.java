@@ -29,9 +29,8 @@ public class MenuScene extends Scene {
             File file = fileChooser.showOpenDialog(stage);
             if(file != null) {
                 try {
-                    OptionsScene optionsScene = new OptionsScene();
-                    optionsScene.load(new CSVData(file));
-                    stage.setScene(optionsScene);
+                    Program.optionsScene.load(new CSVData(file));
+                    stage.setScene(Program.optionsScene);
                 } catch (IOException e) {
                     new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
                     e.printStackTrace();

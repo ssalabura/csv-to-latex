@@ -47,8 +47,10 @@ public class OptionsScene extends Scene {
                 yChoiceBox.getItems().add(column);
             }
         }
-        xChoiceBox.setValue(xChoiceBox.getItems().get(0));
-        yChoiceBox.setValue(yChoiceBox.getItems().get(1));
+        try {
+            xChoiceBox.setValue(xChoiceBox.getItems().get(0));
+            yChoiceBox.setValue(yChoiceBox.getItems().get(1));
+        } catch(IndexOutOfBoundsException ignored) { }
 
         CheckBox overwriteCheckbox = new CheckBox("Overwrite file");
         overwriteCheckbox.setSelected(true);
@@ -72,6 +74,7 @@ public class OptionsScene extends Scene {
 
         leftBox.getChildren().add(tableView);
         leftBox.setMinWidth(500);
+        leftBox.setMaxWidth(500);
         leftBox.setAlignment(Pos.CENTER);
         rightBox.getChildren().addAll(
                 titleText, titleTextField,

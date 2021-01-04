@@ -31,7 +31,7 @@ public class CSVData {
             try {
                 parsedLine = parseLine(line);
             } catch(IOException e) {
-                throw new IOException(e.getMessage() + " in line " + output.size());
+                throw new IOException(e.getMessage() + " in line " + output.size()+1);
             }
             if(output.size() > 1 && parsedLine.size() != output.get(output.size()-1).size()) {
                 throw new IOException("Wrong number of fields in line " + output.size());

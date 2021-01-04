@@ -47,12 +47,15 @@ public class LatexPlot {
 
     File saveToFile(String fileName, boolean overwrite) throws IOException {
         int fileNo = 0;
-        File newFile = new File(fileName + ".tex");
-        while(!overwrite && newFile.exists()) {
-            fileNo++;
-            newFile = new File(fileName + "(" + fileNo + ")" + ".tex");
+        new File("output/").mkdirs();
+        File newFile = new File("output/" + fileName + ".tex");
+        if(!overwrite) {
+            while(newFile.exists()) {
+                fileNo++;
+                newFile = new File("output/" + fileName + "(" + fileNo + ")" + ".tex");
+            }
+            if (!newFile.createNewFile()) throw new IOException("Error creating new file");
         }
-        if (!overwrite && !newFile.createNewFile()) throw new IOException("Error creating new file");
         FileWriter writer = new FileWriter(newFile);
         writer.write(this.toString());
         writer.close();
