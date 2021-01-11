@@ -96,7 +96,7 @@ public class OptionsScene extends Scene {
                     csvData.makeCoordinates(xChoiceBox.getValue(), yChoiceBox.getValue()));
             try {
                 File file = latexPlot.saveToFile(csvData.getFileName(), overwriteCheckbox.isSelected());
-                new Alert(Alert.AlertType.CONFIRMATION, "Successfully saved to " + file.getName()).show();
+                new Alert(Alert.AlertType.INFORMATION, "Successfully saved to output/" + file.getName()).show();
             } catch (IOException e) {
                 new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
             }

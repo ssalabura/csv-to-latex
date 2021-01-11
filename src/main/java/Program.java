@@ -1,4 +1,5 @@
 import javafx.application.Application;;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 public class Program extends Application {
@@ -9,6 +10,7 @@ public class Program extends Application {
     public void start(Stage primaryStage) {
         stage = primaryStage;
         stage.setTitle("CSV to LaTeX");
+        stage.getIcons().add(new Image("icon.png"));
 
         menuScene = new MenuScene();
         menuScene.load(primaryStage);
