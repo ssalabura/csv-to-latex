@@ -6,12 +6,14 @@ public class LatexPlot {
     private String title;
     private String xlabel;
     private String ylabel;
+    private PlotStyle plotStyle;
     private Coordinates coordinates;
 
-    LatexPlot(String title, String xlabel, String ylabel, Coordinates coordinates) {
+    LatexPlot(String title, String xlabel, String ylabel, PlotStyle plotStyle, Coordinates coordinates) {
         this.title = title;
         this.xlabel = xlabel;
         this.ylabel = ylabel;
+        this.plotStyle = plotStyle;
         this.coordinates = coordinates;
     }
 
@@ -32,8 +34,7 @@ public class LatexPlot {
                 "]\n" +
                 "\n" +
                 "\\addplot[\n" +
-                "    color=blue,\n" +
-                "    mark=square,\n" +
+                plotStyle +
                 "    ]\n" +
                 "    coordinates {\n" +
                 "    " + coordinates + "\n" +
@@ -47,7 +48,7 @@ public class LatexPlot {
 
     File saveToFile(String fileName, boolean overwrite) throws IOException {
         int fileNo = 0;
-        new File("output/").mkdirs();
+        new File("output/").mkdir();
         File newFile = new File("output/" + fileName + ".tex");
         if(!overwrite) {
             while(newFile.exists()) {

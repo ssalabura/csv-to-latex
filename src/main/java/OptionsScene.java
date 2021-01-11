@@ -19,7 +19,6 @@ public class OptionsScene extends Scene {
         root.getChildren().clear();
         HBox hBox = new HBox(20);
         VBox leftBox = new VBox(20);
-        VBox rightBox = new VBox(20);
 
         TableView<ArrayList<String>> tableView = new TableView<>();
         for(int i=0; i<csvData.getLabels().size(); i++) {
@@ -32,14 +31,27 @@ public class OptionsScene extends Scene {
             tableView.getItems().add(line);
         }
 
+        leftBox.getChildren().add(tableView);
+        leftBox.setMinWidth(500);
+        leftBox.setMaxWidth(500);
+        leftBox.setAlignment(Pos.CENTER);
+
+        VBox rightBox = new VBox(20);
+
         Text titleText = new Text("Title:");
         TextField titleTextField = new TextField(csvData.getFileName());
 
-        Text xText = new Text("x Label:");
+        HBox xBox = new HBox(10);
+        Text xText = new Text("X coordinate:");
         ChoiceBox<String> xChoiceBox = new ChoiceBox<>();
+        xBox.getChildren().addAll(xText, xChoiceBox);
+        xBox.setAlignment(Pos.CENTER);
 
-        Text yText = new Text("y Label:");
+        HBox yBox = new HBox(10);
+        Text yText = new Text("Y coordinate:");
         ChoiceBox<String> yChoiceBox = new ChoiceBox<>();
+        yBox.getChildren().addAll(yText, yChoiceBox);
+        yBox.setAlignment(Pos.CENTER);
 
         for(String column : csvData.getLabels()) {
             if(csvData.isColumnParseable(column)) {
@@ -52,15 +64,36 @@ public class OptionsScene extends Scene {
             yChoiceBox.setValue(yChoiceBox.getItems().get(1));
         } catch(IndexOutOfBoundsException ignored) { }
 
+        HBox colorBox = new HBox(10);
+        Text colorText = new Text("Line color:");
+        TextField colorTextField = new TextField("blue");
+        colorTextField.setMaxWidth(100);
+        colorBox.getChildren().addAll(colorText, colorTextField);
+        colorBox.setAlignment(Pos.CENTER);
+
+        HBox widthBox = new HBox(10);
+        Text widthText = new Text("Line width:");
+        ChoiceBox<String> widthChoiceBox = new ChoiceBox<>();
+        widthChoiceBox.getItems().addAll("thin", "normal", "thick");
+        if(csvData.getData().size() < 20) widthChoiceBox.setValue("thick");
+        else if(csvData.getData().size() < 100) widthChoiceBox.setValue("normal");
+        else widthChoiceBox.setValue("thin");
+        widthBox.getChildren().addAll(widthText, widthChoiceBox);
+        widthBox.setAlignment(Pos.CENTER);
+
+        CheckBox markerCheckbox = new CheckBox("Markers");
+        if(csvData.getData().size() < 100) markerCheckbox.setSelected(true);
+
         CheckBox overwriteCheckbox = new CheckBox("Overwrite file");
         overwriteCheckbox.setSelected(true);
-
-        Text todo = new Text("TODO: some other options");
 
         Button btnGenerate = new Button("Generate");
         btnGenerate.setFont(Font.font(30));
         btnGenerate.setOnAction(event -> {
-            LatexPlot latexPlot = new LatexPlot(titleTextField.getText(), xChoiceBox.getValue(), yChoiceBox.getValue(), csvData.makeCoordinates(xChoiceBox.getValue(), yChoiceBox.getValue()));
+            LatexPlot latexPlot = new LatexPlot(titleTextField.getText(),
+                    xChoiceBox.getValue(), yChoiceBox.getValue(),
+                    new PlotStyle(colorTextField.getText(), markerCheckbox.isSelected(), widthChoiceBox.getValue()),
+                    csvData.makeCoordinates(xChoiceBox.getValue(), yChoiceBox.getValue()));
             try {
                 File file = latexPlot.saveToFile(csvData.getFileName(), overwriteCheckbox.isSelected());
                 new Alert(Alert.AlertType.CONFIRMATION, "Successfully saved to " + file.getName()).show();
@@ -72,16 +105,13 @@ public class OptionsScene extends Scene {
         btnExit.setFont(Font.font(20));
         btnExit.setOnAction(event -> Program.stage.setScene(Program.menuScene));
 
-        leftBox.getChildren().add(tableView);
-        leftBox.setMinWidth(500);
-        leftBox.setMaxWidth(500);
-        leftBox.setAlignment(Pos.CENTER);
         rightBox.getChildren().addAll(
                 titleText, titleTextField,
-                xText, xChoiceBox,
-                yText, yChoiceBox,
+                xBox, yBox,
+                colorBox,
+                widthBox,
+                markerCheckbox,
                 overwriteCheckbox,
-                todo,
                 btnGenerate, btnExit);
         rightBox.setAlignment(Pos.CENTER);
 

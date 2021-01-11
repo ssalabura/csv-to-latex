@@ -86,14 +86,17 @@ public class CSVData {
     boolean isColumnParseable(String label) {
         Integer columnNumber = getColumnNumber(label);
         if(columnNumber == null) return false;
+
+        int success = 0, failure = 0;
         for(ArrayList<String> row : getData()) {
             try {
                 Double.parseDouble(row.get(columnNumber));
+                success++;
             } catch (NumberFormatException e) {
-                return false;
+                failure++;
             }
         }
-        return true;
+        return success > failure;
     }
 
     Coordinates makeCoordinates(String xlabel, String ylabel) {
@@ -104,8 +107,12 @@ public class CSVData {
         Integer yColumn = getColumnNumber(ylabel);
 
         Coordinates output = new Coordinates();
-        for(ArrayList<String> list : getData()) {
-            output.add(Double.parseDouble(list.get(xColumn)), Double.parseDouble(list.get(yColumn)));
+        for(ArrayList<String> row : getData()) {
+            try {
+                double x = Double.parseDouble(row.get(xColumn));
+                double y = Double.parseDouble(row.get(yColumn));
+                output.add(x, y);
+            } catch(NumberFormatException ignored) {}
         }
         return output;
     }
