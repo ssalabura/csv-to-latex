@@ -19,12 +19,12 @@ public class LatexPlot {
 
     @Override
     public String toString() {
-        return "\\documentclass{article}\n" +
+        return "\\documentclass{minimal}\n" +
                 "\\usepackage{pgfplots}\n" +
                 "\n" +
                 "\\begin{document}\n" +
                 "\n" +
-                "\\begin{tikzpicture}\n" +
+                "\\begin{tikzpicture}[scale=1.5]\n" +
                 "\\begin{axis}[\n" +
                 "    title={" + title + "},\n" +
                 "    xlabel={" + xlabel + "},\n" +
